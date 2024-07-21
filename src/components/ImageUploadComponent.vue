@@ -1,0 +1,117 @@
+<script setup>
+import { ref } from 'vue'
+import imageApi from '@/api/image.js'
+import { ElMessage } from 'element-plus'
+import { Plus,Upload } from '@element-plus/icons-vue'
+
+const drawer = ref(false)
+
+const title = ref('')
+
+
+const fileList = ref([])
+let imageData = ref(null)
+const dialogImageUrl = ref('')
+const dialogVisible = ref(false)
+
+const emit = defineEmits(['upLoaded'])
+
+const handleRemove = () => {
+  // console.log(uploadFile, uploadFiles);
+}
+
+const handlePictureCardPreview = (uploadFile) => {
+  dialogImageUrl.value = uploadFile.url
+  // console.log(uploadFile.url);
+  dialogVisible.value = true
+}
+
+const handleExceed = () => {
+  ElMessage.warning('只能上传一张图片')
+}
+
+const uploadImage = (item) => {
+  imageData.value = item.file
+}
+
+const submitForm = async () => {
+  if (imageData.value == null) {
+    ElMessage.error('请上传一张图片')
+    return
+  }
+  if (title.value === '') {
+    ElMessage.error('请输入标题')
+    return
+  }
+  const formData = new FormData()
+  formData.append('file', imageData.value)
+  formData.append('title', title.value)
+  formData.append('createdAt', new Date().toISOString())
+
+  const response = await imageApi.uploadImage(formData)
+  if (response === 200) {
+    ElMessage.success('上传成功')
+    fileList.value = []
+    title.value = ''
+    imageData.value = null
+    drawer.value = false
+    emit('upLoaded')
+  } else {
+    ElMessage.error(`上传失败,${response}`)
+  }
+}
+
+</script>
+
+<template>
+  <el-drawer v-model="drawer" title="上传新图片" size="30%" style="box-shadow:0 4px 8px rgba(0, 0, 0, 0.1)">
+    <div>
+      <el-form ref="form" label-width="100px">
+        <el-form-item label="标题">
+          <el-input v-model="title" placeholder="请输入标题"></el-input>
+        </el-form-item>
+        <el-form-item label="上传图片">
+          <el-upload
+            class="upload-demo"
+            action="#"
+            list-type="picture-card"
+            :on-preview="handlePictureCardPreview"
+            :on-remove="handleRemove"
+            :file-list="fileList"
+            :http-request="uploadImage"
+            :limit="1"
+            :on-exceed="handleExceed"
+          >
+            <el-icon>
+              <Plus />
+            </el-icon>
+          </el-upload>
+        </el-form-item>
+        <el-button type="primary" class="submit-btn" @click="submitForm">上传到服务器</el-button>
+      </el-form>
+
+      <el-dialog v-model="dialogVisible">
+        <img :src="dialogImageUrl" alt="Preview Image" />
+      </el-dialog>
+    </div>
+  </el-drawer>
+
+  <el-button class="btn" type="primary" size="large" style="margin-left: 16px" @click="drawer = true">
+    上传新图片<el-icon class="el-icon--right"><Upload /></el-icon>
+  </el-button>
+
+</template>
+<style scoped>
+.btn {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  z-index: 500;
+}
+
+.submit-btn {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+}
+</style>
