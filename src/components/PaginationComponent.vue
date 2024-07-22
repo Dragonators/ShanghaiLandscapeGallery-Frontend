@@ -19,7 +19,6 @@ watch([currentPage, pageSize], () => {
     page: currentPage.value,
     pageSize: pageSize.value
   })
-  console.log(2222);
   store.dispatch('beginRefresh')
 }, { immediate: true })
 

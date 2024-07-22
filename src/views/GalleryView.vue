@@ -31,7 +31,7 @@
               <el-text class="btn-text">评论</el-text>
             </el-button>
           </transition>
-          <transition name="fade-in-up">
+          <transition name="fade-in-up" v-if="oidcIsAuthenticated">
             <el-button
               class="del-btn"
               v-if="hoverIndex === index"
@@ -41,7 +41,7 @@
               <el-text class="btn-text">删除</el-text>
             </el-button>
           </transition>
-          <transition name="fade-in-up">
+          <transition name="fade-in-up" v-if="oidcIsAuthenticated">
             <el-button
               class="update-btn"
               v-if="hoverIndex === index"
@@ -60,12 +60,12 @@
       </router-view>
     </el-scrollbar>
   </div>
-  <image-upload-component @up-loaded="refreshImages" />
-  <image-update-component ref="editChildRef" @up-dated="refreshImages" />
+  <image-upload-component v-if="oidcIsAuthenticated" @up-loaded="refreshImages" />
+  <image-update-component v-if="oidcIsAuthenticated" ref="editChildRef" @up-dated="refreshImages" />
 </template>
 
 <script setup>
-import { onMounted, ref } from 'vue'
+import { computed, onMounted, ref } from 'vue'
 import { useRouter } from 'vue-router'
 import { useStore } from 'vuex'
 import imageApi from '@/api/image.js'
@@ -81,6 +81,8 @@ const ids = ref([])
 const imageSrcList = ref([])
 const hoverIndex = ref(null)
 const editChildRef = ref(null)
+
+const oidcIsAuthenticated = computed(() => store.getters['oidcStore/oidcIsAuthenticated']);
 
 onMounted(async () => {
   await refreshImages()
@@ -168,7 +170,6 @@ const hideButton = function() {
 
 store.subscribe(async (mutation, state) => {
   if (state.refreshing) {
-    console.log(11111);
     await store.dispatch('endRefresh')
     await refreshImages()
   }

@@ -17,6 +17,9 @@ importers:
       element-plus:
         specifier: ^2.7.7
         version: 2.7.7(vue@3.4.31)
+      oidc-client-ts:
+        specifier: ^3.0.1
+        version: 3.0.1
       vue:
         specifier: ^3.4.29
         version: 3.4.31
@@ -26,6 +29,9 @@ importers:
       vuex:
         specifier: ^4.1.0
         version: 4.1.0(vue@3.4.31)
+      vuex-oidc:
+        specifier: ^4.0.2
+        version: 4.0.2(oidc-client-ts@3.0.1)(vue-router@4.4.0(vue@3.4.31))(vue@3.4.31)(vuex@4.1.0(vue@3.4.31))
     devDependencies:
       '@rushstack/eslint-patch':
         specifier: ^1.8.0
@@ -975,6 +981,10 @@ packages:
     engines: {node: '>=6'}
     hasBin: true
 
+  jwt-decode@4.0.0:
+    resolution: {integrity: sha512-+KJGIyHgkGuIq3IEBNftfhW/LfWhXUIY6OmyVWjliu5KH1y0fw7VQ8YndE2O4qZdMSd9SqbnC8GOcZEy0Om7sA==}
+    engines: {node: '>=18'}
+
   keyv@4.5.4:
     resolution: {integrity: sha512-oxVHkHR/EJf2CNXnWxRLW6mg7JyCCUcG0DtEGmL2ctUo1PNTin1PUil+r/+4r5MpVgC/fn1kjsx7mjSujKqIpw==}
 
@@ -1041,6 +1051,10 @@ packages:
 
   nth-check@2.1.1:
     resolution: {integrity: sha512-lqjrjmaOoAnWfMmBPL+XNnynZh2+swxiX3WUE0s4yEHI6m+AwrK2UZOimIRl3X/4QctVqS8AiZjFqyOGrMXb/w==}
+
+  oidc-client-ts@3.0.1:
+    resolution: {integrity: sha512-xX8unZNtmtw3sOz4FPSqDhkLFnxCDsdo2qhFEH2opgWnF/iXMFoYdBQzkwCxAZVgt3FT3DnuBY3k80EZHT0RYg==}
+    engines: {node: '>=18'}
 
   once@1.4.0:
     resolution: {integrity: sha512-lNaJgI+2Q5URQBkccEKHTQOPaXdUxnZZElQTZY0MFUAuaEqe1E+Nyvgdz/aIyNi6Z9MzO5dv1H8n58/GELp3+w==}
@@ -1259,6 +1273,14 @@ packages:
     peerDependenciesMeta:
       typescript:
         optional: true
+
+  vuex-oidc@4.0.2:
+    resolution: {integrity: sha512-GOm4UTEJnrRI1nCI7BTzQdbD3w0Jm2O3mFHQtWI98n332+C8oPpcQUbWx2EhybditleLZOXZWbA9jtMvp4XEsA==}
+    peerDependencies:
+      oidc-client-ts: '>= 2.0.0'
+      vue: '>= 2.5.0'
+      vue-router: '>= 3.0.0'
+      vuex: '>= 3.0.0'
 
   vuex@4.1.0:
     resolution: {integrity: sha512-hmV6UerDrPcgbSy9ORAtNXDr9M4wlNP4pEFKye4ujJF8oqgFFuxDCdOLS3eNoRTtq5O3hoBDh9Doj1bQMYHRbQ==}
@@ -2227,6 +2249,8 @@ snapshots:
 
   json5@2.2.3: {}
 
+  jwt-decode@4.0.0: {}
+
   keyv@4.5.4:
     dependencies:
       json-buffer: 3.0.1
@@ -2285,6 +2309,10 @@ snapshots:
   nth-check@2.1.1:
     dependencies:
       boolbase: 1.0.0
+
+  oidc-client-ts@3.0.1:
+    dependencies:
+      jwt-decode: 4.0.0
 
   once@1.4.0:
     dependencies:
@@ -2472,6 +2500,13 @@ snapshots:
       '@vue/runtime-dom': 3.4.31
       '@vue/server-renderer': 3.4.31(vue@3.4.31)
       '@vue/shared': 3.4.31
+
+  vuex-oidc@4.0.2(oidc-client-ts@3.0.1)(vue-router@4.4.0(vue@3.4.31))(vue@3.4.31)(vuex@4.1.0(vue@3.4.31)):
+    dependencies:
+      oidc-client-ts: 3.0.1
+      vue: 3.4.31
+      vue-router: 4.4.0(vue@3.4.31)
+      vuex: 4.1.0(vue@3.4.31)
 
   vuex@4.1.0(vue@3.4.31):
     dependencies:

@@ -1,4 +1,6 @@
 import axios from 'axios'
+import store from '@/store'
+
 // 创建一个Axios实例
 const apiClient = axios.create({
   baseURL: 'https://localhost:7032/api/v1', // 请替换为你的API URL
@@ -83,6 +85,7 @@ export default {
       const response = await apiClient.post(`/Image`,formData,{
         headers: {
           'Content-Type': 'multipart/form-data',
+          'Authorization': `Bearer ${store.state.oidcStore.access_token}`
         },
       });
       return response.status;
@@ -96,7 +99,11 @@ export default {
   // 删除图片
   async deleteImage(imageId) {
     try {
-      const response = await apiClient.delete(`/Image/${imageId}`);
+      const response = await apiClient.delete(`/Image/${imageId}`,{
+        headers: {
+          'Authorization': `Bearer ${store.state.oidcStore.access_token}`
+        }
+      });
       return response.status;
     } catch (error) {
       console.error(`Error deleting image with ID ${imageId}:`, error.response ? error.response.data : error.message);
@@ -110,6 +117,7 @@ export default {
       const response = await apiClient.put(`/Image/${imageId}`, formData,{
         headers: {
           'Content-Type': 'multipart/form-data',
+          'Authorization': `Bearer ${store.state.oidcStore.access_token}`
         }});
       return response.status;
     } catch (error) {

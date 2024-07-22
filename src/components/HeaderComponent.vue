@@ -20,16 +20,28 @@
     <template #extra>
       <div class="my-page-header-right">
         <search-component style="display: flex; margin-right: 1vw" />
-        <el-button type="primary" class="ml-2" style="margin-left: auto">登录</el-button>
+        <el-button v-if="oidcIsAuthenticated"
+                   href @click.prevent="signOut"
+                   type="primary"
+                   class="ml-2"
+                   style="margin-left: auto">注销
+        </el-button>
+        <el-button v-else
+                   href @click.prevent="authenticateOidc"
+                   type="primary"
+                   class="ml-2"
+                   style="margin-left: auto">登录
+        </el-button>
       </div>
     </template>
   </el-page-header>
 </template>
 
 <script setup>
-import { ref, watch } from 'vue'
+import { computed, ref, watch } from 'vue'
 import { ArrowLeft } from '@element-plus/icons-vue'
 import { useRoute, useRouter } from 'vue-router'
+import { useStore } from 'vuex'
 import PaginationComponent from '@/components/PaginationComponent.vue'
 import SearchComponent from '@/components/SearchComponent.vue'
 
@@ -39,8 +51,18 @@ const currentIcon = ref(ArrowLeft)
 
 let path = ref('')
 const route = useRoute()
+const store = useStore()
 path.value = route.path
 
+const oidcIsAuthenticated = computed(() => store.getters['oidcStore/oidcIsAuthenticated']);
+const authenticateOidc = async() => store.dispatch('oidcStore/authenticateOidc');
+const removeOidcUser = async() =>store.dispatch('oidcStore/removeOidcUser');
+
+const signOut = async () => {
+  removeOidcUser().then(() => {
+    router.push('/');
+  });
+}
 const onBack = () => {
   router.push({ name: 'home' })
 }
